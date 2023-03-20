@@ -1,14 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // :::::::::: Pages ::::::::::
 import SignInPage from "./pages/signInPage/SignInPage";
-import Schedule from "./pages/schedulePage/Schedule";
-import SignUpPage from "./pages/signUpPage/SignUpPage";
+import MainPage from "./pages/mainPage/MainPage";
+import BooksPage from "./pages/booksPage/BooksPage";
+import BookRegisterPage from "./pages/bookRegisterPage/BookRegisterPage";
+import LoansPage from "./pages/loansPage/LoansPage";
+import UsersPage from "./pages/UsersPage/UsersPage";
 
 const router = createBrowserRouter([
   {
@@ -16,12 +18,28 @@ const router = createBrowserRouter([
     element: <SignInPage />,
   },
   {
-    path: "cadastro",
-    element: <SignUpPage />,
+    path: "inicio",
+    element: <MainPage />,
   },
   {
-    path: "agenda",
-    element: <Schedule />,
+    path: "livros",
+    element: <BooksPage />,
+  },
+  {
+    path: "cadastroDeLivro",
+    element: <BookRegisterPage />,
+  },
+  {
+    path: "emprestimos",
+    element: <LoansPage />,
+  },
+  {
+    path: "usuarios",
+    element: <UsersPage />,
+  },
+  {
+    path: "cadastro",
+    // element: <SignUpPage />,
   },
 ]);
 

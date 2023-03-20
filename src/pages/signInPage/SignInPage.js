@@ -2,9 +2,9 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // :::::::::: Material Parts ::::::::::
-
 import { Paper } from "@mui/material";
 import { Box } from "@mui/system";
 
@@ -28,6 +28,21 @@ export default function SignInPage() {
 
   const [input, setInput] = useState(initialValue);
 
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    return navigate("/inicio");
+  };
+
+  const bookwareADM = {
+    email: "bookwareADM@bookware.com",
+    password: "adm123"
+  }
+
+  const localStorageADM = () => {
+    localStorage.setItem("BookwareADM", JSON.stringify(bookwareADM));
+  };
+
   return (
     <Container>
       <Box
@@ -42,9 +57,15 @@ export default function SignInPage() {
           },
         }}
       >
-        <Paper elevation={3}>
-          {" "}
-          LOGIN
+        <Paper
+          elevation={3}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <h1>Login</h1>
           <Form onSubmit={onSubmit}>
             <Input
               placeholder="E-mail"
@@ -58,8 +79,9 @@ export default function SignInPage() {
               name="password"
               onChange={onChange}
             />
-            <Button type="submit">ENTRAR</Button>
-            <Button>NÃO POSSUI CONTA? CADASTRE-SE!</Button>
+            <Button type="submit" onClick={handleNavigation}>
+              ENTRAR
+            </Button>
           </Form>
         </Paper>
       </Box>
@@ -76,6 +98,10 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  h1 {
+    text-align: center;
+  }
 `;
 const Form = styled.form`
   display: flex;
