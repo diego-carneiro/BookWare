@@ -4,9 +4,11 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 // :::::::::: Material Parts ::::::::::
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import AutoStoriesRoundedIcon from "@mui/icons-material/AutoStoriesRounded";
 import CompareArrowsRoundedIcon from "@mui/icons-material/CompareArrowsRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 
 export default function SideBar() {
   const navigate = useNavigate();
@@ -23,8 +25,19 @@ export default function SideBar() {
     return navigate("/emprestimos");
   };
 
+  const navigateToMain = () => {
+    return navigate("/inicio");
+  };
+
+  const navigateToLogout = () => {
+    return navigate("/");
+  };
+
   return (
     <Container>
+      <Button type="submit" onClick={navigateToMain}>
+        <MenuRoundedIcon />
+      </Button>
       <Button type="submit" onClick={navigateToUsers}>
         <PersonRoundedIcon />
       </Button>
@@ -34,19 +47,16 @@ export default function SideBar() {
       <Button type="submit" onClick={navigateToLoans}>
         <CompareArrowsRoundedIcon />
       </Button>
-      {/* <Button type="submit">
-        <AutoStoriesRoundedIcon />
+      <Button type="submit" onClick={navigateToLogout}>
+        <ExitToAppRoundedIcon />
       </Button>
-      <Button type="submit">
-        <AutoStoriesRoundedIcon />
-      </Button> */}
     </Container>
   );
 }
 
 // ::::::::::Styled-Components::::::::::
 const Container = styled.div`
-  width: 400px;
+  width: 100px;
   min-height: 100vh;
   background-color: #000028;
 

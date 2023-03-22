@@ -11,6 +11,7 @@ import BooksPage from "./pages/booksPage/BooksPage";
 import BookRegisterPage from "./pages/bookRegisterPage/BookRegisterPage";
 import LoansPage from "./pages/loansPage/LoansPage";
 import UsersPage from "./pages/UsersPage/UsersPage";
+import UserRegisterPage from "./pages/userRegisterPage/UserRegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -38,8 +39,8 @@ const router = createBrowserRouter([
     element: <UsersPage />,
   },
   {
-    path: "cadastro",
-    // element: <SignUpPage />,
+    path: "cadastroDeUsuario",
+    element: <UserRegisterPage />,
   },
 ]);
 

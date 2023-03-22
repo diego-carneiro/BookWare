@@ -1,7 +1,7 @@
 // :::::::::: Tools ::::::::::
 import * as React from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 // :::::::::: Material Parts ::::::::::
@@ -20,28 +20,29 @@ export default function SignInPage() {
     setInput({ ...input, [name]: value });
   }
 
-  function onSubmit(ev) {
-    ev.preventDefault();
-
-    //TO DO - API CONNECTION
-  }
-
   const [input, setInput] = useState(initialValue);
 
   const navigate = useNavigate();
 
-  const handleNavigation = () => {
-    return navigate("/inicio");
-  };
-
   const bookwareADM = {
     email: "bookwareADM@bookware.com",
-    password: "adm123"
-  }
-
-  const localStorageADM = () => {
-    localStorage.setItem("BookwareADM", JSON.stringify(bookwareADM));
+    password: "adm123",
   };
+
+  const handleNavigation = () => {
+    if (
+      input.email === bookwareADM.email &&
+      input.password === bookwareADM.password
+    ) {
+      return navigate("/inicio");
+    }
+  };
+
+  function onSubmit(ev) {
+    ev.preventDefault();
+
+    handleNavigation();
+  }
 
   return (
     <Container>
@@ -61,15 +62,17 @@ export default function SignInPage() {
           elevation={3}
           sx={{
             display: "flex",
-            justifyContent: "center",
-            flexWrap: "wrap",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
           <h1>Login</h1>
+          <Logo src="./bookware.png" />
           <Form onSubmit={onSubmit}>
             <Input
               placeholder="E-mail"
-              type="text"
+              type="email"
               name="email"
               onChange={onChange}
             />
@@ -79,9 +82,7 @@ export default function SignInPage() {
               name="password"
               onChange={onChange}
             />
-            <Button type="submit" onClick={handleNavigation}>
-              ENTRAR
-            </Button>
+            <Button type="submit">ENTRAR</Button>
           </Form>
         </Paper>
       </Box>
@@ -101,6 +102,7 @@ const Container = styled.div`
 
   h1 {
     text-align: center;
+    margin-top: 60px;
   }
 `;
 const Form = styled.form`
@@ -120,11 +122,16 @@ const Input = styled.input`
 const Button = styled.button`
   width: 350px;
   height: 52px;
-  margin-top: 24px;
+  margin: 24px 0px 80px 0px;
   background-color: #000028;
   border-radius: 8px;
   border: none;
   font-size: 14px;
   font-weight: 700;
   color: #ffffff;
+`;
+const Logo = styled.img`
+  width: 200px;
+  height: 150px;
+  margin-top: 40px;
 `;

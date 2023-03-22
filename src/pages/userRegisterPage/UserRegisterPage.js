@@ -1,7 +1,7 @@
 // :::::::::: Tools ::::::::::
 import * as React from "react";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // :::::::::: Material Parts ::::::::::
@@ -11,30 +11,10 @@ import { Box } from "@mui/system";
 // :::::::::: Components ::::::::::
 import SideBar from "../../globalComponents/SideBar";
 
-export default function BookRegisterPage() {
-  const [books, setBooks] = useState(() => {
-    const localStorageBooks = JSON.parse(localStorage.getItem("books"));
-
-    if (localStorageBooks) {
-      return localStorageBooks;
-    } else {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem("books", JSON.stringify(books));
-  }, [books]);
-
+export default function UserRegisterPage() {
   const initialValue = {
-    title: "",
-    author: "",
-    publisher: "",
-    gender: "",
-    pages: "",
-    ISBN: "",
-    status: "",
-    obs: "",
+    email: "",
+    password: "",
   };
 
   const [input, setInput] = useState(initialValue);
@@ -45,21 +25,18 @@ export default function BookRegisterPage() {
     setInput({ ...input, [name]: value });
   }
 
+  function onSubmit(ev) {
+    ev.preventDefault();
+
+    //TO DO - API CONNECTION
+  }
+
   const navigate = useNavigate();
 
   const navigateToBooks = () => {
-    return navigate("/livros");
+    return navigate("/usuarios");
   };
 
-  const addBook = () => {
-    setBooks([...books, input]);
-  };
-
-  function onSubmit(ev) {
-    ev.preventDefault();
-    addBook();
-  }
-  console.log(books);
   return (
     <Container>
       <SideBar />
@@ -84,59 +61,48 @@ export default function BookRegisterPage() {
               flexWrap: "wrap",
             }}
           >
-            <h1>Cadastro de Livro</h1>
+            <h1>Cadastro de Usuário</h1>
             <Form onSubmit={onSubmit}>
               <Input
-                placeholder="Titulo"
+                placeholder="Nome"
                 type="text"
-                name="title"
+                name="Name"
                 onChange={onChange}
               />
               <Input
-                placeholder="Autor"
+                placeholder="Tipo"
                 type="text"
-                name="author"
+                name="type"
                 onChange={onChange}
               />
               <Input
-                placeholder="Editora"
+                placeholder="Telefone"
                 type="text"
-                name="publisher"
+                name="telephone"
                 onChange={onChange}
               />
               <Input
-                placeholder="Gênero"
+                placeholder="Rua"
                 type="text"
-                name="gender"
+                name="street"
                 onChange={onChange}
               />
               <Input
-                placeholder="Páginas"
+                placeholder="Bairro"
                 type="text"
-                name="pages"
+                name="neighborhood"
                 onChange={onChange}
               />
               <Input
-                placeholder="ISBN"
+                placeholder="Cidade"
                 type="text"
-                name="ISBN"
+                name="city"
                 onChange={onChange}
               />
-              <Input
-                placeholder="Status"
-                type="text"
-                name="status"
-                onChange={onChange}
-              />
-              <Input
-                placeholder="Observação"
-                type="text"
-                name="obs"
-                onChange={onChange}
-              />
-              <Button type="submit">SALVAR</Button>
+
+              <Button type="submit" onClick={navigateToBooks}>SALVAR</Button>
             </Form>
-          </Paper>
+          </Paper> 
         </Box>
       </Content>
     </Container>

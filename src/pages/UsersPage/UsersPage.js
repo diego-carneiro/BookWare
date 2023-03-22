@@ -12,15 +12,17 @@ import SideBar from "../../globalComponents/SideBar";
 export default function UsersPage() {
   const navigate = useNavigate();
 
-  const navigateToRegister = () => {
-    return navigate("/cadastroDeLivro");
+  const navigateToUserRegister = () => {
+    return navigate("/cadastroDeUsuario");
   };
 
   return (
     <Container>
       <SideBar />
       <Content>
-USUARIOS
+        <Button type="submit" onClick={navigateToUserRegister}>
+          <AddCircleOutlineRoundedIcon />
+        </Button>
       </Content>
     </Container>
   );
@@ -71,4 +73,3 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
 `;
-
