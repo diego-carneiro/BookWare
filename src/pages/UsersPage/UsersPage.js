@@ -2,24 +2,91 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 // :::::::::: Material Parts ::::::::::
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
+import { styled as StyledMUI } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 // :::::::::: Components ::::::::::
 import SideBar from "../../globalComponents/SideBar";
 
 export default function UsersPage() {
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    const localStorageUsers = JSON.parse(localStorage.getItem("users"));
+
+    if (localStorageUsers) {
+      setRows(localStorageUsers);
+    }
+  }, []);
+
   const navigate = useNavigate();
 
   const navigateToUserRegister = () => {
     return navigate("/cadastroDeUsuario");
   };
 
+  const StyledTableCell = StyledMUI(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = StyledMUI(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+
   return (
     <Container>
       <SideBar />
       <Content>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Nome</StyledTableCell>
+                <StyledTableCell align="right">Tipo</StyledTableCell>
+                <StyledTableCell align="right">Telefone</StyledTableCell>
+                <StyledTableCell align="right">Email</StyledTableCell>
+                <StyledTableCell align="right">Status</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <StyledTableRow key={row.name}>
+                  <StyledTableCell component="th" scope="row">
+                    {row.name}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">{row.type}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    {row.telephone}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">{row.email}</StyledTableCell>
+                  <StyledTableCell align="right">{row.status}</StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
         <Button type="submit" onClick={navigateToUserRegister}>
           <AddCircleOutlineRoundedIcon />
         </Button>
@@ -47,10 +114,13 @@ const Content = styled.div`
   width: 100%;
   min-height: 100vh;
   background-color: #e5e5e5;
+  box-sizing: border-box;
+  padding: 150px;
 
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 
   h1 {
     font-size: 50px;

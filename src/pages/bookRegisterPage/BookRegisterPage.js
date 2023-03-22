@@ -47,10 +47,6 @@ export default function BookRegisterPage() {
 
   const navigate = useNavigate();
 
-  const navigateToBooks = () => {
-    return navigate("/livros");
-  };
-
   const addBook = () => {
     setBooks([...books, input]);
   };
@@ -59,7 +55,7 @@ export default function BookRegisterPage() {
     ev.preventDefault();
     addBook();
   }
-  console.log(books);
+
   return (
     <Container>
       <SideBar />

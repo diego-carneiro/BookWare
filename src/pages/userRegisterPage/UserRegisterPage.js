@@ -1,7 +1,7 @@
 // :::::::::: Tools ::::::::::
 import * as React from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 // :::::::::: Material Parts ::::::::::
@@ -12,9 +12,27 @@ import { Box } from "@mui/system";
 import SideBar from "../../globalComponents/SideBar";
 
 export default function UserRegisterPage() {
+  const [users, setUsers] = useState(() => {
+    const localStorageUsers = JSON.parse(localStorage.getItem("users"));
+
+    if (localStorageUsers) {
+      return localStorageUsers;
+    } else {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("users", JSON.stringify(users));
+  }, [users]);
+
   const initialValue = {
-    email: "",
-    password: "",
+    name: "",
+    type: "",
+    telephone: "",
+    street: "",
+    neighborhood: "",
+    city: "",
   };
 
   const [input, setInput] = useState(initialValue);
@@ -25,17 +43,17 @@ export default function UserRegisterPage() {
     setInput({ ...input, [name]: value });
   }
 
+  const navigate = useNavigate();
+
+  const addUser = () => {
+    setUsers([...users, input]);
+  };
+
   function onSubmit(ev) {
     ev.preventDefault();
 
-    //TO DO - API CONNECTION
+    addUser();
   }
-
-  const navigate = useNavigate();
-
-  const navigateToBooks = () => {
-    return navigate("/usuarios");
-  };
 
   return (
     <Container>
@@ -66,7 +84,7 @@ export default function UserRegisterPage() {
               <Input
                 placeholder="Nome"
                 type="text"
-                name="Name"
+                name="name"
                 onChange={onChange}
               />
               <Input
@@ -99,10 +117,9 @@ export default function UserRegisterPage() {
                 name="city"
                 onChange={onChange}
               />
-
-              <Button type="submit" onClick={navigateToBooks}>SALVAR</Button>
+              <Button type="submit">SALVAR</Button>
             </Form>
-          </Paper> 
+          </Paper>
         </Box>
       </Content>
     </Container>
