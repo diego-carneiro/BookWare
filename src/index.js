@@ -10,6 +10,7 @@ import MainPage from "./pages/mainPage/MainPage";
 import BooksPage from "./pages/booksPage/BooksPage";
 import BookRegisterPage from "./pages/bookRegisterPage/BookRegisterPage";
 import LoansPage from "./pages/loansPage/LoansPage";
+import LoanRegisterPage from "./pages/loanRegisterPage/LoanRegisterPage";
 import UsersPage from "./pages/UsersPage/UsersPage";
 import UserRegisterPage from "./pages/userRegisterPage/UserRegisterPage";
 
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "emprestimos",
     element: <LoansPage />,
+  },
+  {
+    path: "cadastroDeEmprestimo",
+    element: <LoanRegisterPage />,
   },
   {
     path: "usuarios",

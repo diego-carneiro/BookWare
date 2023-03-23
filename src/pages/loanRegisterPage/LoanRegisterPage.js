@@ -11,27 +11,26 @@ import { Box } from "@mui/system";
 // :::::::::: Components ::::::::::
 import SideBar from "../../globalComponents/SideBar";
 
-export default function BookRegisterPage() {
-  const [books, setBooks] = useState(() => {
-    const localStorageBooks = JSON.parse(localStorage.getItem("books"));
+export default function LoanRegisterPage() {
+  const [loans, setLoans] = useState(() => {
+    const localStorageLoans = JSON.parse(localStorage.getItem("loans"));
 
-    if (localStorageBooks) {
-      return localStorageBooks;
+    if (localStorageLoans) {
+      return localStorageLoans;
     } else {
       return [];
     }
   });
 
   useEffect(() => {
-    localStorage.setItem("books", JSON.stringify(books));
-  }, [books]);
+    localStorage.setItem("loans", JSON.stringify(loans));
+  }, [loans]);
 
   const initialValue = {
-    title: "",
-    author: "",
-    publisher: "",
-    gender: "",
-    ISBN: "",
+    reader: "",
+    book: "",
+    initialDate: "",
+    endDate: "",
     status: "",
   };
 
@@ -45,13 +44,14 @@ export default function BookRegisterPage() {
 
   const navigate = useNavigate();
 
-  const addBook = () => {
-    setBooks([...books, input]);
+  const addLoan = () => {
+    setLoans([...loans, input]);
   };
 
   function onSubmit(ev) {
     ev.preventDefault();
-    addBook();
+
+    addLoan();
   }
 
   return (
@@ -78,36 +78,30 @@ export default function BookRegisterPage() {
               flexWrap: "wrap",
             }}
           >
-            <h1>Cadastro de Livro</h1>
+            <h1>Cadastro de Usuário</h1>
             <Form onSubmit={onSubmit}>
               <Input
-                placeholder="Titulo"
+                placeholder="Leitor"
                 type="text"
-                name="title"
+                name="reader"
                 onChange={onChange}
               />
               <Input
-                placeholder="Autor"
+                placeholder="Livro"
                 type="text"
-                name="author"
+                name="book"
                 onChange={onChange}
               />
               <Input
-                placeholder="Editora"
+                placeholder="Data de Empréstimo"
                 type="text"
-                name="publisher"
+                name="initialDate"
                 onChange={onChange}
               />
               <Input
-                placeholder="Gênero"
+                placeholder="Data de Entrega"
                 type="text"
-                name="gender"
-                onChange={onChange}
-              />
-              <Input
-                placeholder="ISBN"
-                type="text"
-                name="ISBN"
+                name="endDate"
                 onChange={onChange}
               />
               <Input

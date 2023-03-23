@@ -28,11 +28,9 @@ export default function UserRegisterPage() {
 
   const initialValue = {
     name: "",
+    email: "",
     type: "",
     telephone: "",
-    street: "",
-    neighborhood: "",
-    city: "",
   };
 
   const [input, setInput] = useState(initialValue);
@@ -88,6 +86,12 @@ export default function UserRegisterPage() {
                 onChange={onChange}
               />
               <Input
+                placeholder="Email"
+                type="email"
+                name="email"
+                onChange={onChange}
+              />
+              <Input
                 placeholder="Tipo"
                 type="text"
                 name="type"
@@ -97,24 +101,6 @@ export default function UserRegisterPage() {
                 placeholder="Telefone"
                 type="text"
                 name="telephone"
-                onChange={onChange}
-              />
-              <Input
-                placeholder="Rua"
-                type="text"
-                name="street"
-                onChange={onChange}
-              />
-              <Input
-                placeholder="Bairro"
-                type="text"
-                name="neighborhood"
-                onChange={onChange}
-              />
-              <Input
-                placeholder="Cidade"
-                type="text"
-                name="city"
                 onChange={onChange}
               />
               <Button type="submit">SALVAR</Button>
