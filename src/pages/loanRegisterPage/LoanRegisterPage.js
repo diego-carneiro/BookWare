@@ -78,7 +78,7 @@ export default function LoanRegisterPage() {
               flexWrap: "wrap",
             }}
           >
-            <h1>Cadastro de Usuário</h1>
+            <h1>Cadastro de Empréstimo</h1>
             <Form onSubmit={onSubmit}>
               <Input
                 placeholder="Leitor"
