@@ -2,11 +2,9 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-
-// pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import { useEffect, useState } from "react";
 
 // :::::::::: Material Parts ::::::::::
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
@@ -26,6 +24,7 @@ import Modal from "@mui/material/Modal";
 
 // :::::::::: Components ::::::::::
 import SideBar from "../../globalComponents/SideBar";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export default function LoansPage() {
   const [url, setUrl] = useState(null);
@@ -35,6 +34,8 @@ export default function LoansPage() {
   const [rowIndex, setRowIndex] = useState(-1);
   const [columnIndex, setColumnIndex] = useState(-1);
   const [changedRows, setChangedRows] = useState([]);
+  const [rowIndexPDF, setRowIndexPDF] = useState(0);
+  const [columnIndexPDF, setColumnIndexPDF] = useState(0);
   const [rows, setRows] = useState(() => {
     const localStorageLoans = JSON.parse(localStorage.getItem("loans"));
 
@@ -93,15 +94,8 @@ export default function LoansPage() {
   }
 
   ///PDF Printer Config
-  const createPdf = () => {
-    const pdfGenerator = pdfMake.createPdf(dd);
-    pdfGenerator.getBlob((blob) => {
-      const url = URL.createObjectURL(blob);
-      setUrl(url);
-    });
-  };
-
-  var dd = {
+// console.log(rows[row]);
+  const dd = {
     content: [
       {
         text: "Empréstimo",
@@ -109,46 +103,70 @@ export default function LoansPage() {
       },
       "Dados de empréstimo do usuário\n\n",
       {
-        text: "Subheader 1 - using subheader style",
+        text: "Leitor",
         style: "subheader",
       },
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.",
       {
-        text: "Subheader 2 - using subheader style",
+        text: rows[rowIndexPDF].reader + "\n\n",
+        style: ["quote", "small"],
+      },
+      {
+        text: "Livro",
         style: "subheader",
       },
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.",
       {
-        text: "It is possible to apply multiple styles, by passing an array. This paragraph uses two styles: quote and small. When multiple styles are provided, they are evaluated in the specified order which is important in case they define the same properties",
+        text: rows[rowIndexPDF].book + "\n\n",
+        style: ["quote", "small"],
+      }, {
+        text: "Data de Empréstimo",
+        style: "subheader",
+      },
+      {
+        text: rows[rowIndexPDF].initialDate + "\n\n",
+        style: ["quote", "small"],
+      }, {
+        text: "Data de Entrega",
+        style: "subheader",
+      },
+      {
+        text: rows[rowIndexPDF].endDate + "\n\n",
+        style: ["quote", "small"],
+      }, {
+        text: "Status",
+        style: "subheader",
+      },
+      {
+        text: rows[rowIndexPDF].status + "\n\n",
         style: ["quote", "small"],
       },
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.",
-      {
-        text: "It is possible to apply multiple styles, by passing an array. This paragraph uses two styles: quote and small. When multiple styles are provided, they are evaluated in the specified order which is important in case they define the same properties",
-        style: ["quote", "small"],
-      },
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.",
-      {
-        text: "It is possible to apply multiple styles, by passing an array. This paragraph uses two styles: quote and small. When multiple styles are provided, they are evaluated in the specified order which is important in case they define the same properties",
-        style: ["quote", "small"],
-      },
+
+
     ],
     styles: {
       header: {
-        fontSize: 18,
+        fontSize: 24,
         bold: true,
       },
       subheader: {
-        fontSize: 15,
+        fontSize: 20,
         bold: true,
       },
       quote: {
         italics: true,
       },
       small: {
-        fontSize: 8,
+        fontSize: 20,
       },
     },
+  };
+
+  const createPdf = () => {
+    const pdfGenerator = pdfMake.createPdf(dd);
+    pdfGenerator.getBlob((blob) => {
+      const url = URL.createObjectURL(blob);
+      setUrl(url);
+    });
+    // pdfGenerator.download();
   };
 
   return (
@@ -171,7 +189,14 @@ export default function LoansPage() {
             <TableBody>
               {rows.map((row, index) => (
                 <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
+                  <StyledTableCell
+                    component="th"
+                    scope="row"
+                    onClick={() => {
+                      setRowIndexPDF(index);
+                      setColumnIndexPDF(0);
+                    }}
+                  >
                     {row.reader}
                   </StyledTableCell>
                   <StyledTableCell align="right">{row.book}</StyledTableCell>
@@ -218,6 +243,7 @@ export default function LoansPage() {
         <Button type="submit" onClick={createPdf}>
           <AddCircleOutlineRoundedIcon />
         </Button>
+        {url && <div>{url}</div>}
         <Modal
           open={open}
           onClose={handleClose}
