@@ -94,7 +94,7 @@ export default function LoansPage() {
   }
 
   ///PDF Printer Config
-// console.log(rows[row]);
+  // console.log(rows[row]);
   const dd = {
     content: [
       {
@@ -107,7 +107,8 @@ export default function LoansPage() {
         style: "subheader",
       },
       {
-        text: rows[rowIndexPDF].reader + "\n\n",
+        text: rows.length !== 0 ? rows[rowIndexPDF].reader + "\n\n" : "",
+
         style: ["quote", "small"],
       },
       {
@@ -115,32 +116,33 @@ export default function LoansPage() {
         style: "subheader",
       },
       {
-        text: rows[rowIndexPDF].book + "\n\n",
+        text: rows.length !== 0 ? rows[rowIndexPDF].book + "\n\n" : "",
         style: ["quote", "small"],
-      }, {
+      },
+      {
         text: "Data de Empréstimo",
         style: "subheader",
       },
       {
-        text: rows[rowIndexPDF].initialDate + "\n\n",
+        text: rows.length !== 0 ? rows[rowIndexPDF].initialDate + "\n\n" : "",
         style: ["quote", "small"],
-      }, {
+      },
+      {
         text: "Data de Entrega",
         style: "subheader",
       },
       {
-        text: rows[rowIndexPDF].endDate + "\n\n",
+        text: rows.length !== 0 ? rows[rowIndexPDF].endDate + "\n\n" : "",
         style: ["quote", "small"],
-      }, {
+      },
+      {
         text: "Status",
         style: "subheader",
       },
       {
-        text: rows[rowIndexPDF].status + "\n\n",
+        text: rows.length !== 0 ? rows[rowIndexPDF].status + "\n\n" : "",
         style: ["quote", "small"],
       },
-
-
     ],
     styles: {
       header: {
