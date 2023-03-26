@@ -2,10 +2,11 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // :::::::::: Material Parts ::::::::::
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import { styled as StyledMUI } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,20 +15,30 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { TextField } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
 // :::::::::: Components ::::::::::
 import SideBar from "../../globalComponents/SideBar";
 
 export default function BooksPage() {
-  const [rows, setRows] = useState([]);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [rowIndex, setRowIndex] = useState(-1);
+  const [columnIndex, setColumnIndex] = useState(-1);
+  const [changedRows, setChangedRows] = useState([]);
+  const [rows, setRows] = useState(() => {
+    const localStorageUsers = JSON.parse(localStorage.getItem("books"));
 
-  useEffect(() => {
-    const localStorageBooks = JSON.parse(localStorage.getItem("books"));
-
-    if (localStorageBooks) {
-      setRows(localStorageBooks);
+    if (localStorageUsers) {
+      return localStorageUsers;
+    } else {
+      return [];
     }
-  }, []);
+  });
 
   const navigate = useNavigate();
 
@@ -55,6 +66,27 @@ export default function BooksPage() {
     },
   }));
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const onChange = (rowInd, colName, value) => {
+    rows[rowInd][colName] = value;
+  };
+
+  function saveToStorage() {
+    localStorage.setItem("books", JSON.stringify(changedRows));
+    handleClose();
+  }
+
   return (
     <Container>
       <SideBar />
@@ -67,12 +99,12 @@ export default function BooksPage() {
                 <StyledTableCell align="right">Gênero</StyledTableCell>
                 <StyledTableCell align="right">Autor</StyledTableCell>
                 <StyledTableCell align="right">Editora</StyledTableCell>
-                <StyledTableCell align="right">Status</StyledTableCell>
                 <StyledTableCell align="right">ISBN</StyledTableCell>
+                <StyledTableCell align="right">Status</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {rows.map((row, index) => (
                 <StyledTableRow key={row.name}>
                   <StyledTableCell component="th" scope="row">
                     {row.title}
@@ -82,8 +114,26 @@ export default function BooksPage() {
                   <StyledTableCell align="right">
                     {row.publisher}
                   </StyledTableCell>
-                  <StyledTableCell align="right">{row.status}</StyledTableCell>
                   <StyledTableCell align="right">{row.ISBN}</StyledTableCell>
+                  <StyledTableCell
+                    align="right"
+                    onClick={() => {
+                      setRowIndex(index);
+                      setColumnIndex(4);
+                    }}
+                  >
+                    {rowIndex === index && columnIndex === 4 ? (
+                      <TextField
+                        name="status"
+                        defaultValue={rows[index]["status"]}
+                        onChange={(event) =>
+                          onChange(index, "status", event.target.value)
+                        }
+                      />
+                    ) : (
+                      row.status
+                    )}
+                  </StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -92,6 +142,41 @@ export default function BooksPage() {
         <Button type="submit" onClick={navigateToBookRegister}>
           <AddCircleOutlineRoundedIcon />
         </Button>
+        <Button
+          type="submit"
+          onClick={() => {
+            handleOpen();
+            setChangedRows(rows);
+          }}
+        >
+          <SaveRoundedIcon />
+        </Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Deseja salvar as alterações?
+            </Typography>
+            <Typography
+              id="modal-modal-description"
+              sx={{ mt: 2 }}
+              onClick={saveToStorage}
+            >
+              SIM
+            </Typography>
+            <Typography
+              id="modal-modal-description"
+              sx={{ mt: 2 }}
+              onClick={handleClose}
+            >
+              NÃO
+            </Typography>
+          </Box>
+        </Modal>
       </Content>
     </Container>
   );

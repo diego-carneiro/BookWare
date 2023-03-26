@@ -2,7 +2,11 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 // :::::::::: Material Parts ::::::::::
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
@@ -24,9 +28,13 @@ import Modal from "@mui/material/Modal";
 import SideBar from "../../globalComponents/SideBar";
 
 export default function LoansPage() {
+  const [url, setUrl] = useState(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [rowIndex, setRowIndex] = useState(-1);
+  const [columnIndex, setColumnIndex] = useState(-1);
+  const [changedRows, setChangedRows] = useState([]);
   const [rows, setRows] = useState(() => {
     const localStorageLoans = JSON.parse(localStorage.getItem("loans"));
 
@@ -36,17 +44,6 @@ export default function LoansPage() {
       return [];
     }
   });
-  const [rowIndex, setRowIndex] = useState(-1);
-  const [columnIndex, setColumnIndex] = useState(-1);
-  const [changedRows, setChangedRows] = useState([]);
-
-  useEffect(() => {
-    const localStorageLoans = JSON.parse(localStorage.getItem("loans"));
-
-    if (localStorageLoans) {
-      setRows(localStorageLoans);
-    }
-  }, []);
 
   const navigate = useNavigate();
 
@@ -91,10 +88,68 @@ export default function LoansPage() {
   };
 
   function saveToStorage() {
-    console.log("pinto");
     localStorage.setItem("loans", JSON.stringify(changedRows));
     handleClose();
   }
+
+  ///PDF Printer Config
+  const createPdf = () => {
+    const pdfGenerator = pdfMake.createPdf(dd);
+    pdfGenerator.getBlob((blob) => {
+      const url = URL.createObjectURL(blob);
+      setUrl(url);
+    });
+  };
+
+  var dd = {
+    content: [
+      {
+        text: "Empréstimo",
+        style: "header",
+      },
+      "Dados de empréstimo do usuário\n\n",
+      {
+        text: "Subheader 1 - using subheader style",
+        style: "subheader",
+      },
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.",
+      {
+        text: "Subheader 2 - using subheader style",
+        style: "subheader",
+      },
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.",
+      {
+        text: "It is possible to apply multiple styles, by passing an array. This paragraph uses two styles: quote and small. When multiple styles are provided, they are evaluated in the specified order which is important in case they define the same properties",
+        style: ["quote", "small"],
+      },
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.",
+      {
+        text: "It is possible to apply multiple styles, by passing an array. This paragraph uses two styles: quote and small. When multiple styles are provided, they are evaluated in the specified order which is important in case they define the same properties",
+        style: ["quote", "small"],
+      },
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.",
+      {
+        text: "It is possible to apply multiple styles, by passing an array. This paragraph uses two styles: quote and small. When multiple styles are provided, they are evaluated in the specified order which is important in case they define the same properties",
+        style: ["quote", "small"],
+      },
+    ],
+    styles: {
+      header: {
+        fontSize: 18,
+        bold: true,
+      },
+      subheader: {
+        fontSize: 15,
+        bold: true,
+      },
+      quote: {
+        italics: true,
+      },
+      small: {
+        fontSize: 8,
+      },
+    },
+  };
 
   return (
     <Container>
@@ -160,6 +215,9 @@ export default function LoansPage() {
         >
           <SaveRoundedIcon />
         </Button>
+        <Button type="submit" onClick={createPdf}>
+          <AddCircleOutlineRoundedIcon />
+        </Button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -177,7 +235,11 @@ export default function LoansPage() {
             >
               SIM
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }} onClick={handleClose}>
+            <Typography
+              id="modal-modal-description"
+              sx={{ mt: 2 }}
+              onClick={handleClose}
+            >
               NÃO
             </Typography>
           </Box>
