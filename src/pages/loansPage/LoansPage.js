@@ -166,7 +166,7 @@ export default function LoansPage() {
       const url = URL.createObjectURL(blob);
       setUrl(url);
     });
-    // pdfGenerator.download();
+    pdfGenerator.download();
   };
 
   return (
