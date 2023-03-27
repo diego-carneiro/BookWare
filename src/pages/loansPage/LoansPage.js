@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 // :::::::::: Material Parts ::::::::::
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
+import PictureAsPdfRoundedIcon from '@mui/icons-material/PictureAsPdfRounded';
 import { styled as StyledMUI } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -243,9 +244,9 @@ export default function LoansPage() {
           <SaveRoundedIcon />
         </Button>
         <Button type="submit" onClick={createPdf}>
-          <AddCircleOutlineRoundedIcon />
+          <PictureAsPdfRoundedIcon />
         </Button>
-        {url && <div>{url}</div>}
+       
         <Modal
           open={open}
           onClose={handleClose}
